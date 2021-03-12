@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>work1</title>
+</head>
+<body>
+<script>
+ // fn is function 
+  function fn(){
+  }
+  const fn =  new fn() //construct function
+  console.log(fn.prototype);  //function object
+  console.log(fn.call({}))//function object
+  $('#header') //$ is a function
+  $.ajax() //$ is a function object
+//recallback
+  const arr = [1,2,3,4,5];
+  arr.forEach(item =>{
+    console.log('for each callback()',item)
+  })
+  console.log('after foreach')
+  setTimeout(() => {
+    console.log('setTime function')
+  }, 0);
+  console.log('after timeout')
+  //result {1,2,3,4,5, after foreach, after timeout, setTime function}
+
+  //error
+  let b = {} // TypeError: b.xxx is not a function
+
+  function fn(){
+    fn()  //无限递归
+  }
+  
+  try{  //捕获error
+    const b = {};
+    e()
+  }catch (error){
+    console.log(error.message);
+    console.log(error.stack)
+  }
+  
+  function fun(){ //抛出error
+    const num = Date.now();
+    if(num % 2 ==1){
+      console.log('it is working',+num);
+    }else {
+      throw new Error('it is not working',+num)
+    }
+  }
+  try{
+    fun()
+  }catch(error){
+    alert(error.message)
+  }
+  //Promise
+  var p = new Promise((resolve,reject)=>{
+    setTimeout(() => {
+      resolve(1);
+      reject(2);
+    }, 1000);
+  });
+  p.then(
+    value => console.log('this is success', value),
+    reason => console.log('this is fail', reason),
+  )
+  //Promise use Ajax
+  function myAsyncFunction(url){
+    return new Promise((resolve,reject)=>{
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET",url);
+      xhr.onload = () => resolve(JSON.parse(xhr.respnseText()));
+      xhr.onerror = () => reject(xhr.statusText);
+      xhr.send();
+    });
+  };
+  a = myAsyncFunction('xxxxx');
+  a.then(
+    value => {
+      console.log('this is success',value)
+    },
+    reason => console.log('it is fail', reason)
+  )
+
+  //why use the Promise
+  function successCallback(result){
+    console.log('success'+result);
+  }
+  function failureCallback(error){
+    console.log('fail'+error);
+  }
+  createAudioFileAsync(audioSettings,successCallback,failureCallback)
+  const promise = createAudioFileAsync(audioSettings);
+  setTimeout(() => {
+    promise.then(successCallback,failureCallback)
+  }, 3000);
+    //回调地狱
+    dosomething(function(result){
+      dosomethingElse(result, function(newResult){
+        doThirThing(newResult,function(finalResult){
+          console.log('this is fail result'+ finalResult);
+        },failureCallback)
+      },failureCallback)
+    },failureCallback)
+    //solve
+    dosomething().then(function(result){
+      return dosomethingElse(result)
+    }).then(function(newResult){
+      return doThirThing(newResult)
+    }).then(function(finalResult){
+      console.log('this is fail result'+finalResult)
+    }).catch(failureCallback)
+
+    //final solve 
+    async function request(){
+      try {
+        const result = await dosomething();
+        const newResult = await dosomethingElse(result);
+        const finalResult = await doThirThing(newResult);
+        console.log('this is fail result'+ finalResult)
+      }catch (error){
+        failureCallback(error)
+      }
+    }
+  //promise
+  const p = new promise((resolve,reject)=>{
+    setTimeout(() => {
+      const time = Date.now();
+      if(time %2 ==1){
+        resolve('this is success'+ time);
+        console.log('after resolve');
+      }else{
+        reject('this is fail',+time);
+      }
+    }, 1000);
+  });
+  p.then(
+    value => console.log('this is success',+ value),
+    reason => console.log('this is fail'+ reason),
+  )
+  // use promise + xhr pakage the ajax function
+  function promiseAjax(url){
+    return new Promise((resolve,reject)=>{
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET',url());
+      xhr.send();
+      xhr.onreadystatechange = ()=>{
+        if(xhr.readyState != 4) return
+        if(xhr.status >=200 && xhr.status<300){
+          resolve(JSON.parse(xhr.response))
+        }else{
+          reject(new Error('request error status'+ xhr.status))
+        }
+      }
+    })
+  }
+  promiseAjax('xxxx').then(
+    value => console.log('this is success',+value),
+    reason => console.log('this is fail', + reason),
+  )
+  //promise API
+  promise.resolve()
+  promise.reject()
+  promise.all()
+  promise.race()
+  //1.1先改变状态，后回调
+  new Promise((resolve,reject)=>{
+    console.log('excutor()')
+    resolve(1);
+    console.log('resolve() change')
+  }).then(value => console.log('onResolve()',value))
+  console.log('new promise()')
+ //1.2
+  const p= new Promise((resolve,reject)=>{
+    console.log('excutor()')
+    setTimeout(() => {
+      resolve(1);
+      console.log('resolve() change')
+    }, 1000);
+  })
+  setTimeout(() => {
+    p.then(value => console.log('this is success',+value))
+  }, 2000);
+  console.log('after new promise')
+  //.then problem
+  new Promise((resolve,reject)=>{
+      console.log('first')
+      setTimeout(() => {
+        resolve(1)
+      }, 1000);
+    }).then(value=> {
+      console.log('value',value)
+      console.log('second')
+      return 2
+    }).then(value =>{
+      console.log('seocnd value',value)
+      return new Promise((resolve,reject)=>{
+        console.log('third')
+        setTimeout(() => {
+          resolve(3)
+        }, 1000);
+      })
+    }).then(value=> console.log('thrid value',value))
+
+    //中断promise
+    return new Promise(()=>{})
+    //async and await
+    async function fun1(){
+      return Promise.resolve(4)
+    }
+
+    async function fun2(){
+      throw 2;
+      //return 2;
+    }
+    async function fun3(){
+      try {
+        const result = await fun2()
+        console.log('this is await function',result)
+      }catch (error){
+        console.log('error',error)
+      }
+    }
+    fun2()
+    //宏队列: [ ]   宏任务
+    //微队列: [  ]   微任务
+    async function async1() {
+      console.log('async1 start')
+      await async2()  // async2().then(() => {})
+      console.log('async1 end')
+    }
+
+    async function async2() {
+      console.log('async2')
+    }
+
+    console.log('script start')
+
+    setTimeout(() => {
+      console.log('setTimeout')
+    }, 0)
+
+    async1()
+    
+    new Promise(function (resolve) {
+      console.log('promise1')
+      resolve()
+    }).then(function () {
+      console.log('promise2')
+    })
+    console.log('script end')
+
+</script>
+</body>
+</html> 
