@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>work2</title>
+</head>
+<body>
+  <script>
+  //test 1.1
+  var x = 10;
+  function fn() {
+    console.log(x);
+  }
+  function show(f) {
+    var x = 20;
+    f();
+  }
+  show(fn);
+  //test1.2
+  var fn = function () {
+    console.log(fn)
+  }
+  fn()
+
+  var obj = {
+    fn2: function () {
+      console.log(fn2)
+    }
+  }
+  obj.fn2()
+  //test 1.3
+  var scope1 = "global scope";
+  function checkScope1() {
+    var scope1 = "local scope";
+    function fn() {
+      return scope1;
+    }
+    
+    return fn();
+  }
+  
+  console.log(checkScope1());
+  //test 1.4
+  var scope2 = "global scope";
+  function checkScope2() {
+    var scope2 = "local scope2";
+    function fn() {
+      return scope2;
+    }
+    
+    return fn;
+  }
+  
+  console.log(checkScope2()());
+  //test 1.5
+  var a = {}
+  var obj1 = {n: 2}
+  var obj2 = {m: 3}
+  a[obj1] = 4
+  a[obj2] = 5
+  console.log(a[obj1]) // 输出多少? 数组会覆盖
+    //ES5 严格模式
+    'use strict';
+    var username = 'andy';
+    var age = 26;
+    console.log(username,age)
+    function Person(name){
+      this.name =name;
+      console.log('name:',name);
+    }
+    new Person('kimi');
+    var a = 2;
+    //eval 作用域，eval可以解析字符串代码转换成可执行代码（不影响外接域）
+    eval('var a =123; alert(a)')
+    console.log(a);
+    //对象如果有重复属性，直接覆盖
+    var obj = {
+      name:'a', 
+      name:'b'
+    }
+    console.log(obj.name)
+  //JSON
+    obj = {name:'andy',age:16}
+    console.log(typeof obj);
+    obj = JSON.stringify(obj);
+    console.log(obj)
+    console.log(typeof obj)//string
+    obj =JSON.parse(obj);
+    console.log(typeof obj)//object
+    //object 
+    Object.defineProperties(obj,{ //配置对象
+      sex:{
+        get: function(){},//get方法
+        set:function(){},//set方法
+      }
+    })
+
+    // 对象本身的两个方法
+    // * get propertyName(){} 用来得到当前属性值的回调函数
+    // * set propertyName(){} 用来监视当前属性值变化的回调函数
+
+    var obj = {
+      get name(){ 
+        return 'andy'
+      }
+    }
+    //array
+    // 1. Array.prototype.indexOf(value)
+    // 2. Array.prototype.lastIndexOf(value)
+    // 3. Array.prototype.forEach(function(item, index){})
+    // 4. Array.prototype.map(function(item, index){})
+    // 5. Array.prototype.filter(function(item, index){})
+
+
+//     1. Function.prototype.bind(obj) :
+//   * 作用: 将函数内的this绑定为obj, 并将函数返回
+//  2. 面试题: 区别bind()与call()和apply()?
+//   * 都能指定函数中的this
+//   * call()/apply()是立即调用函数
+//   * bind()是将函数返回
+var obj = {name:'andy'}
+function fn(msg){
+  console.log(this,msg)
+}
+fn.bind(obj,123)()
+
+//let will replace var
+//const cannot change
+  let a = 3;
+  let {a,b} = {a:'andy', b:12}
+  let [a,b] = [1,'andy']
+  let fn = new function(){
+    console.log(`function this is ${xxx}`)
+  }
+//...
+    let arr1 = [1,2,3];
+    let arr2 = [2,...arr1,6];
+    console.log(arr2)
+    let arr3=[]
+    arr3.push(...arr2);
+    console.log(arr3)
+//Symbol是一个类
+
+ // 当箭头函数只有一个形参的时候，() 可以省略，也可以不省略
+ let fn = a => console.log('this is function',a)
+ // 当箭头函数有多个形参的时候， ()不能省略
+ let fn1 = (a,b) => console.log('this is function',a,b)
+  </script>
+</body>
+</html>

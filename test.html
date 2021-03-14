@@ -8,20 +8,9 @@
 </head>
 <body>
   <script>
-    async function fun1(){
-      throw 2
-    }
-    
-    async function fun2(){
-      try {
-        const result = await fun1()
-        console.log('this is await function',result)
-      }catch (error){
-        console.log('error',error)
-      }
-    }
-    fun2()
-
+  let obj2 = {name: 'kobe', age: 43};
+  let obj ={...obj2};
+  console.log(obj);
   </script>
 </body>
 </html>
